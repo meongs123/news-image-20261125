@@ -1,4 +1,8 @@
-# Slate for Wednesday 25 November 2026 — 44 stories, frozen at ~16:10 WIB.
+# Slate for Wednesday 25 November 2026 — 44 stories, frozen at ~16:10 WIB,
+# freeze pass ~19:15 WIB: brief 31 swapped (Iran honour-killing -> Hormuz tankers,
+# Reuters Wed 25 Nov; wire reports cluster 09:00-09:46 UTC = 16:00-16:46 WIB,
+# at/just after the research cutoff; IRGC claim, Reuters could not verify).
+# Same-region swap (Middle East -> Middle East) so region counts are unchanged.
 # Every deck and brief carries its real date. Sources are wire attributions only.
 # Trap stories (ICJ 19 Nov, COP31 22 Nov, Merkury 22 Nov, Huang Mon 23 Nov,
 # Gibran 12 Nov, Hanoi Tue 24 Nov) are NOT in this slate; they live in DATE_CHECK.
@@ -114,7 +118,7 @@ BRIEFS = [
     "Murmansk governor Chibis detained in embezzlement probe (reported Wed 25 Nov).",
     "Microsoft declares 'Code Red' after historic 24h Outlook outage (reported Wed 25 Nov; outage 12-13 Nov).",
     "Delhi cafe gang-rape allegation; 3 arrested (24 Nov).",
-    "Iran honour-killing case: pregnant 19-year-old killed, parents confessed (Wed 25 Nov).",
+    "Iran says two oil tankers hit mines in Strait of Hormuz, exploding and catching fire (Wed 25 Nov).",
 ]
 
 DATE_CHECK = [
