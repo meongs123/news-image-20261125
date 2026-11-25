@@ -12,29 +12,27 @@ COUNT_STRIP = "44 STORIES  •  7 REGIONS  •  13 ILLUSTRATED"
 NUMBERS = [
     ("50,018.70", "Dow, first close over 50,000 (Tue)"),
     ("-1.48%", "Nasdaq 23,733.54 (Tue close)"),
-    ("-6.16%", "KOSPI; Samsung -7.31% (Wed)"),
+    ("-6.16%", "KOSPI; Samsung -9.87% (Wed)"),
     ("Tk 17,000", "Garment wage, +36% (Wed)"),
     ("5-1", "Real Madrid beat PSV (Tue eve)"),
     ("9,500 lb", "Lead azide, Iowa blast 09:00 (Wed)"),
 ]
 
 REGIONS = [
-    ("Americas", 8, "#0e6b6b"),
+    ("Americas", 9, "#0e6b6b"),
     ("Asia", 13, "#a8232a"),
-    ("Europe", 7, "#1f3a6e"),
+    ("Europe", 6, "#1f3a6e"),
     ("Africa", 2, "#8a6d1a"),
     ("Middle East", 8, "#7a5a1e"),
     ("World", 2, "#5b3a7a"),
     ("Oceania", 4, "#2a7a8a"),
 ]
 
-TIMELINE = [
-    ("08:18", "Shenzhou-24 launches"),
-    ("09:00", "Iowa blast set"),
-    ("11:56", "Docking at Tiangong"),
-    ("CANBERRA", "Treaty signed"),
-    ("CARTAGENA", "Hostages freed"),
-]
+# WEDNESDAY WIRE dropped in fix pass 1: its order (launch -> blast -> docking) was
+# false in any single timezone, and the Canberra treaty signing time is unverified.
+# Verified Beijing times for the record: launch 08:18, docking 11:56, Cartagena
+# storming ~01:00 local = 14:00 Beijing, Iowa blast 09:00 CST = 23:00 Beijing.
+# Splash alone carries the structural variation (per design fallback).
 
 # Big leads: (number, kicker, headline, deck, source, art kind, pin lat/lon)
 BIG = [
@@ -53,35 +51,35 @@ BIG = [
 # Small leads: (number, kicker, headline, deck, source, art kind, pin lat/lon)
 SMALL = [
     (4, "MIDDLE EAST", "HOUTHIS CLAIM REFINERY STRIKE",
-     "Group says it hit Ras Tanura refinery and Riyadh district Wed; coalition "
-     "says 4 drones intercepted.", "REUTERS", "refinery", (26.6, 50.2)),
+     "Claims Ras Tanura refinery hit Wed; 4 drones intercepted.",
+     "REUTERS", "refinery", (26.6, 50.2)),
     (5, "TRADE", "TARIFFS ON 16 PARTNERS 'SET TO BE UNVEILED'",
-     "Trump administration poised to unveil Section 301 findings Tue/Wed; no rates "
-     "announced, none imposed.", "REUTERS", "tariff", (38.9, -77.0)),
-    (6, "USA", "TRUMP PARDONS TURKEYS, BOASTS OF IRAN WAR",
-     "Freedom and Feathers pardoned Tue at White House; Trump claims US 'wiped out' "
-     "Iran's conventional forces.", "AP", "turkey", (38.9, -77.1)),
+     "Section 301 findings due Tue/Wed; no rates announced.",
+     "REUTERS", "tariff", (38.9, -77.0)),
+    (6, "USA", "TRUMP PARDONS TURKEYS, TOUTS IRAN CAMPAIGN",
+     "Freedom and Feathers pardoned Tue; Trump touts Iran campaign.",
+     "AP", "turkey", (38.9, -77.1)),
     (7, "GAZA", "GAZA: SECOND HAMAS CHIEF REPORTED DEAD",
-     "Chief Abu Nahel killed Tue, 7 dead in all; second chief reported dead Wed, "
-     "IDF had not confirmed.", "REUTERS", "gaza", (31.5, 34.5)),
+     "Chief Abu Nahel killed Tue; second chief reported dead Wed.",
+     "REUTERS", "gaza", (31.5, 34.5)),
     (8, "AUSTRALIA", "AUSTRALIA SAYS SORRY TO LGBTQ VETERANS",
-     "Defence Minister Marles apologises in parliament Wed for decades of "
-     "discrimination; ban lifted 1992.", "REUTERS", "sorry", (-35.3, 149.3)),
+     "Marles apologises in parliament Wed; ban lifted 1992.",
+     "REUTERS", "sorry", (-35.3, 149.3)),
     (9, "TECH", "CIA AND ODNI HACKED - UNCLASSIFIED ONLY",
-     "Breach of open-source analysis system reported Tue; no classified data, "
-     "no disruption; attacker unknown.", "NYT / AP", "hack", (38.9, -77.2)),
+     "Unclassified system breached Tue; no classified data taken.",
+     "NYT / AP", "hack", (38.9, -77.2)),
     (10, "IRAQ", "BAGHDAD MOVES TO SEIZE KURDISH OILFIELDS",
-     "PM orders federal control of oilfields and borders after smuggling probe Tue; "
-     "KRG PM rejects orders.", "REUTERS", "oilfield", (33.3, 44.4)),
-    (11, "SPORT", "SENEGAL GET AFCON TITLE BACK",
-     "CAS reinstates Senegal as 2025 winners Tue; Morocco says it will appeal "
-     "to Swiss supreme court.", "REUTERS", "trophy", (14.7, -17.4)),
+     "PM orders federal control of oilfields Tue; KRG rejects move.",
+     "REUTERS", "oilfield", (33.3, 44.4)),
+    (11, "SPORT", "SENEGAL GETS AFCON TITLE BACK",
+     "CAS reinstates Senegal as 2025 winners Tue; Morocco to appeal.",
+     "REUTERS", "trophy", (14.7, -17.4)),
     (12, "SPORT", "REAL MADRID 5-1 PSV, FIVE FROM FIVE",
-     "Mbappe scores twice Tue eve, passes 104 Real goals with 105 in 121 games.",
+     "Mbappe scores twice Tue eve, passes Ronaldo's 104, now 105 in 121 games.",
      "REUTERS", "football", (40.4, -3.7)),
     (13, "USA", "SIX DEAD IN MISSISSIPPI PLANE CRASH",
-     "Cessna 210L found off coast early Wed; six aboard incl. two children; "
-     "FAA/NTSB investigate.", "USA TODAY", "plane", (30.2, -89.3)),
+     "Cessna found off coast early Wed; six aboard, incl. two children.",
+     "USA TODAY", "plane", (30.2, -89.3)),
 ]
 
 # Briefs: 31 one-liners, heroes 4-7 first, then the 27 briefs. All date-tagged.
@@ -96,7 +94,7 @@ BRIEFS = [
     "DR Congo rebel group CRP halts advance on Bunia, withdraws (announced Tue 24 Nov).",
     "China graft probe: Shanghai party chief Chen Jining investigated (announced Tue 24 Nov).",
     "Trump awards Medal of Freedom to Rudy Giuliani (Tue 24 Nov).",
-    "Tesla + SpaceX name 5 directors to negotiate possible ~$3.5tn merger (Mon 24 Nov).",
+    "Tesla + SpaceX name 5 directors to negotiate possible ~$3.5tn merger (Tue 24 Nov).",
     "Tidal to ban fully AI-generated music from 9 Dec (announced Tue 24 Nov).",
     "Broadcom patches 23 VMware flaws incl. critical vCenter bypass (24 Nov).",
     "McDonald's Japan app database breached (reported 24 Nov).",
@@ -114,7 +112,7 @@ BRIEFS = [
     "Shein agrees to pay $100m to settle US lawsuits (reported Wed 25 Nov).",
     "UK sanctions Houthis as entity + 4 figures (Tue 24 Nov).",
     "Murmansk governor Chibis detained in embezzlement probe (reported Wed 25 Nov).",
-    "Lens lose 3-1 at Leipzig, Champions League hopes fade (Tue 24 Nov).",
+    "Microsoft declares 'Code Red' after historic 24h Outlook outage (reported Wed 25 Nov; outage 12-13 Nov).",
     "Delhi cafe gang-rape allegation; 3 arrested (24 Nov).",
     "Iran honour-killing case: pregnant 19-year-old killed, parents confessed (Wed 25 Nov).",
 ]
@@ -131,8 +129,5 @@ DATE_CHECK = [
 
 SOURCES = ("Sources: Reuters, AP, USA Today, Australian PM's office, China Daily Asia, "
            "NY Times, WSJ, Australian Dept. of Defence.")
-MAP_KEY = ("Map: 1 Jiuquan - 2 Canberra - 3 Middletown - 4 Ras Tanura - 5 Washington - "
-           "6 White House - 7 Gaza - 8 Canberra - 9 Virginia - 10 Baghdad - 11 Dakar - "
-           "12 Madrid - 13 Mississippi coast.")
 FOOTER_DATE = ("Wednesday 25 November 2026 - the day's biggest stories; "
                "earlier events are dated in the deck.")

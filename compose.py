@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Draw the Wednesday 25 November 2026 front page. Deterministic: no clock,
 no randomness, no network. Fails loudly on any text overflow."""
+import math
 import sys
 from pathlib import Path
 
@@ -83,13 +84,29 @@ def art(d, box, kind):
     if kind == "rocket":
         for sx, sy in [(x0 + 14, y0 + 10), (x1 - 18, y0 + 22), (x0 + 40, y0 + 6), (x1 - 40, y1 - 12)]:
             d.ellipse([sx - 2, sy - 2, sx + 2, sy + 2], fill=(255, 255, 255))
-        d.ellipse([x1 - 52, y0 + 8, x1 - 16, y0 + 44], fill=(216, 120, 60))
-        d.polygon([(cx - 9, y1 - 14), (cx - 9, cy - 8), (cx, cy - 30), (cx + 9, cy - 8), (cx + 9, y1 - 14)],
-                  fill=(240, 240, 235))
-        d.polygon([(cx - 9, cy - 8), (cx - 20, cy + 4), (cx - 9, cy + 2)], fill=RED)
-        d.polygon([(cx + 9, cy - 8), (cx + 20, cy + 4), (cx + 9, cy + 2)], fill=RED)
-        d.polygon([(cx - 5, y1 - 14), (cx, y0 + h - 2), (cx + 5, y1 - 14)], fill=(255, 180, 40))
-        d.ellipse([cx - 4, cy - 20, cx + 4, cy - 12], fill=(120, 180, 220))
+        # Earth limb along the bottom of the panel
+        limb = [(x, y1 - 4 - int(20 * math.sin(math.pi * (x - x0) / w)))
+                for x in range(x0, x1 + 1, 10)]
+        d.polygon([(x0, y1)] + limb + [(x1, y1)], fill=(52, 110, 180))
+        d.line(limb, fill=(140, 190, 235), width=2)
+        # Tiangong module with solar wings, top right
+        d.rounded_rectangle([cx + 52, y0 + 22, x1 - 16, y0 + 44], radius=8,
+                            fill=(225, 228, 232), outline=INK)
+        d.rectangle([cx + 58, y0 + 10, cx + 98, y0 + 20], fill=(28, 58, 150))
+        d.rectangle([cx + 58, y0 + 46, cx + 98, y0 + 56], fill=(28, 58, 150))
+        for wx in (cx + 66, cx + 84, cx + 102):
+            d.ellipse([wx - 3, y0 + 29, wx + 3, y0 + 35], fill=(120, 180, 220))
+        # Docking arm from the rocket nose to the module
+        d.line([(cx + 8, cy - 38), (cx + 52, y0 + 33)], fill=(200, 200, 205), width=4)
+        d.ellipse([cx + 48, y0 + 29, cx + 56, y0 + 37], fill=(255, 255, 255), outline=INK)
+        # Rocket, enlarged to fill the panel
+        d.polygon([(cx - 24, y1 - 26), (cx - 24, cy - 6), (cx, cy - 52), (cx + 24, cy - 6),
+                   (cx + 24, y1 - 26)], fill=(240, 240, 235))
+        d.polygon([(cx - 24, cy - 6), (cx - 40, cy + 14), (cx - 24, cy + 10)], fill=RED)
+        d.polygon([(cx + 24, cy - 6), (cx + 40, cy + 14), (cx + 24, cy + 10)], fill=RED)
+        d.polygon([(cx - 11, y1 - 26), (cx, y1 - 2), (cx + 11, y1 - 26)], fill=(255, 180, 40))
+        d.polygon([(cx - 5, y1 - 26), (cx, y1 - 10), (cx + 5, y1 - 26)], fill=(255, 220, 90))
+        d.ellipse([cx - 8, cy - 34, cx + 8, cy - 18], fill=(120, 180, 220), outline=INK)
     elif kind == "treaty":
         d.rectangle([x0 + 10, y0 + 8, cx - 4, y0 + h - 14], fill=(30, 60, 140))
         d.rectangle([cx + 4, y0 + 8, x1 - 10, y0 + h - 14], fill=(0, 90, 60))
@@ -173,17 +190,6 @@ def art(d, box, kind):
         d.polygon([(cx - 6, cy - 8), (cx + 2, cy - 22), (cx + 8, cy - 8)], fill=(40, 44, 52))
 
 
-LAND = [
-    (-168, -55, 15, 72), (-80, -35, -55, 10), (-10, 40, 36, 70),
-    (-18, 50, -35, 35), (40, 180, 5, 75), (60, 140, -12, 8),
-    (110, 155, -45, -10), (95, 105, 5, 28), (165, 180, -48, -34),
-]
-
-
-def on_land(lat, lon):
-    return any(w <= lon <= e and s <= lat <= n for w, e, s, n in LAND)
-
-
 def render():
     img = Image.new("RGB", (W, H), CREAM)
     d = ImageDraw.Draw(img)
@@ -215,81 +221,58 @@ def render():
         d.rectangle([x, 182, x + seg, 200], fill=col)
         lab = "%s %d" % (name, n)
         lf = fnt(SANS_B, 9)
+        if lf.getlength(lab) >= seg - 6:
+            lf = fnt(SANS_B, 8)
         if lf.getlength(lab) < seg - 6:
             d.text((x + 4, 187), lab, font=lf, fill=(255, 255, 255))
         x += seg
-    # Wednesday Wire timeline
-    d.text((16, 206), "WEDNESDAY WIRE", font=fnt(SANS_B, 11), fill=RED)
-    d.line([16, 232, W - 16, 232], fill=NAVY, width=2)
-    tw = (W - 32 - 154) // 5
-    for i, (when, what) in enumerate(S.TIMELINE):
-        tx = 170 + i * tw
-        d.ellipse([tx + 4, 227, tx + 14, 237], fill=NAVY, outline=(255, 255, 255), width=1)
-        d.text((tx + 20, 208), when, font=fnt(SANS_B, 10), fill=NAVY)
-        para(d, tx + 20, 219, what, fnt(SANS, 9), INK, tw - 24, 1, 10)
+    # Wednesday Wire dropped in fix pass 1 (chronology unverifiable); splash kept.
     # Splash: hero 1 full width
-    y = 238
-    d.rectangle([16, y, W - 16, y + 122], outline=INK, width=1)
-    art(d, (17, y + 1, 377, y + 121), S.BIG[0][5])
+    y = 208
+    d.rectangle([16, y, W - 16, y + 140], outline=INK, width=1)
+    art(d, (17, y + 1, 377, y + 139), S.BIG[0][5])
     badge(d, 360, y + 16, 1)
     d.text((392, y + 8), S.BIG[0][1], font=fnt(SANS_B, 11), fill=RED)
     para(d, 392, y + 26, S.BIG[0][2], fnt(SERIF_B, 20), INK, W - 16 - 392 - 8, 2, 24)
     para(d, 392, y + 78, S.BIG[0][3], fnt(SANS, 11), INK, W - 16 - 392 - 8, 3, 13)
-    d.text((392, y + 108), S.BIG[0][4], font=fnt(SANS, 8), fill=GREY)
+    d.text((392, y + 126), S.BIG[0][4], font=fnt(SANS, 8), fill=GREY)
     # Heroes 2-3, half width each
-    y = 368
+    y = 356
     hw = (W - 32 - 8) // 2
     for j, hero in enumerate(S.BIG[1:]):
         bx = 16 + j * (hw + 8)
-        d.rectangle([bx, y, bx + hw, y + 112], outline=INK, width=1)
-        art(d, (bx + 1, y + 1, bx + hw - 1, y + 53), hero[5])
+        d.rectangle([bx, y, bx + hw, y + 128], outline=INK, width=1)
+        art(d, (bx + 1, y + 1, bx + hw - 1, y + 60), hero[5])
         badge(d, bx + hw - 16, y + 16, hero[0])
-        d.text((bx + 8, y + 58), hero[1], font=fnt(SANS_B, 9), fill=RED)
-        para(d, bx + 8, y + 70, hero[2], fnt(SERIF_B, 13), INK, hw - 16, 2, 15)
+        d.text((bx + 8, y + 65), hero[1], font=fnt(SANS_B, 9), fill=RED)
+        para(d, bx + 8, y + 77, hero[2], fnt(SERIF_B, 13), INK, hw - 16, 2, 15)
     # Decks for heroes 2-3 drawn below headlines: recompute positions
     for j, hero in enumerate(S.BIG[1:]):
         bx = 16 + j * (hw + 8)
         hl = wrap(hero[2], fnt(SERIF_B, 13), hw - 16)
-        dy = y + 70 + len(hl) * 15
+        dy = y + 77 + len(hl) * 15
         para(d, bx + 8, dy, hero[3], fnt(SANS, 9), INK, hw - 16, 1, 11)
-        d.text((bx + 8, y + 100), hero[4], font=fnt(SANS, 7), fill=GREY)
+        d.text((bx + 8, y + 116), hero[4], font=fnt(SANS, 7), fill=GREY)
     # Small leads: 5 x 2
-    y0 = 488
+    y0 = 492
     sw = (W - 32 - 4 * 8) // 5
-    sh = 96
+    sh = 118
     for i, lead in enumerate(S.SMALL):
         r, c = divmod(i, 5)
         bx = 16 + c * (sw + 8)
         by = y0 + r * (sh + 8)
         d.rectangle([bx, by, bx + sw, by + sh], outline=INK, width=1)
-        art(d, (bx + 1, by + 1, bx + sw - 1, by + 31), lead[5])
+        art(d, (bx + 1, by + 1, bx + sw - 1, by + 36), lead[5])
         badge(d, bx + sw - 14, by + 14, lead[0], r=8)
-        d.text((bx + 6, by + 34), lead[1], font=fnt(SANS_B, 8), fill=RED)
-        para(d, bx + 6, by + 45, lead[2], fnt(SERIF_B, 10), INK, sw - 12, 2, 11)
-        hl = wrap(lead[2], fnt(SERIF_B, 10), sw - 12)
-        dy = by + 45 + len(hl) * 11
-        para(d, bx + 6, dy, lead[3], fnt(SANS, 8), INK, sw - 12, 3, 9)
-    # Map
-    my = 692
-    d.text((16, my), "WHERE IT HAPPENED", font=fnt(SANS_B, 11), fill=RED)
-    mx, mw, mh = 16, W - 32, 78
-    d.rectangle([mx, my + 16, mx + mw, my + 16 + mh], outline=INK, width=1)
-    step = 6
-    for gy in range(my + 19, my + 16 + mh - 2, step):
-        for gx in range(mx + 4, mx + mw - 2, step):
-            lat = 90 - (gy - (my + 16)) / mh * 180
-            lon = (gx - mx) / mw * 360 - 180
-            if on_land(lat, lon):
-                d.ellipse([gx - 1, gy - 1, gx + 1, gy + 1], fill=(90, 110, 90))
-    pins = [(h[0], h[6]) for h in S.BIG] + [(l[0], l[6]) for l in S.SMALL]
-    nudge = {6: (16, 0), 8: (14, -9), 9: (-16, 7)}
-    for num, (lat, lon) in pins:
-        px = mx + (lon + 180) / 360 * mw
-        py = my + 16 + (90 - lat) / 180 * mh
-        dx, dy = nudge.get(num, (0, 0))
-        badge(d, int(px) + dx, int(py) + dy, num, r=7)
+        d.text((bx + 6, by + 40), lead[1], font=fnt(SANS_B, 8), fill=RED)
+        para(d, bx + 6, by + 52, lead[2], fnt(SERIF_B, 11), INK, sw - 12, 3, 12)
+        hl = wrap(lead[2], fnt(SERIF_B, 11), sw - 12)
+        dy = by + 52 + len(hl) * 12
+        para(d, bx + 6, dy, lead[3], fnt(SANS, 8), INK, sw - 12, 2, 10)
+    # Map dropped in fix pass 1 (no true continent outlines at this size);
+    # the space goes to the lead tier and the briefs.
     # Briefs, two columns
-    by = 790
+    by = 744
     d.text((16, by), "THE REST OF THE DAY", font=fnt(SANS_B, 11), fill=RED)
     d.line([16, by + 15, W - 16, by + 15], fill=RULE, width=1)
     bf = fnt(SANS, 7)
@@ -297,10 +280,10 @@ def render():
     for i, b in enumerate(S.BRIEFS):
         col, row = divmod(i, 16)
         bx = 16 + col * (colw + 16)
-        yy = by + 20 + row * 7
+        yy = by + 20 + row * 8
         d.text((bx, yy), "%d. %s" % (i + 1, b), font=bf, fill=INK)
     # DATE CHECK
-    dy = 924
+    dy = 900
     d.rectangle([16, dy, W - 16, dy + 58], outline=RED, width=2)
     d.text((24, dy + 4), "DATE CHECK  —  NOT 25 NOVEMBER NEWS", font=fnt(SANS_B, 10), fill=RED)
     dcf = fnt(SANS, 8)
@@ -310,11 +293,10 @@ def render():
         yy = dy + 20 + row * 9
         d.text((bx, yy), "X  %s  —  %s" % (what, when), font=dcf, fill=INK)
     # Footer
-    fy = 982
+    fy = 966
     d.line([16, fy, W - 16, fy], fill=RULE, width=1)
     para(d, 16, fy + 5, S.FOOTER_DATE, fnt(SANS_B, 9), INK, W - 32, 1, 11)
     para(d, 16, fy + 17, S.SOURCES, fnt(SANS, 8), GREY, W - 32, 1, 10)
-    para(d, 16, fy + 28, S.MAP_KEY, fnt(SANS, 7), GREY, W - 32, 1, 9)
     return img
 
 
