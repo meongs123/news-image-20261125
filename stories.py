@@ -3,6 +3,10 @@
 # Reuters Wed 25 Nov; wire reports cluster 09:00-09:46 UTC = 16:00-16:46 WIB,
 # at/just after the research cutoff; IRGC claim, Reuters could not verify).
 # Same-region swap (Middle East -> Middle East) so region counts are unchanged.
+# Fix pass 3 (last): brief 14 swapped (McDonald's Japan breach -> Indonesia mine
+# disaster, Reuters/AP Wed 25 Nov; 26 trapped since Mon 23 Nov, 3 bodies recovered
+# Wed, 23 still trapped; pre-cutoff story the researcher missed). Same-region swap
+# (Asia -> Asia) so region counts are unchanged.
 # Every deck and brief carries its real date. Sources are wire attributions only.
 # Trap stories (ICJ 19 Nov, COP31 22 Nov, Merkury 22 Nov, Huang Mon 23 Nov,
 # Gibran 12 Nov, Hanoi Tue 24 Nov) are NOT in this slate; they live in DATE_CHECK.
@@ -101,7 +105,7 @@ BRIEFS = [
     "Tesla + SpaceX name 5 directors to negotiate possible ~$3.5tn merger (Tue 24 Nov).",
     "Tidal to ban fully AI-generated music from 9 Dec (announced Tue 24 Nov).",
     "Broadcom patches 23 VMware flaws incl. critical vCenter bypass (24 Nov).",
-    "McDonald's Japan app database breached (reported 24 Nov).",
+    "Indonesia: 3 bodies recovered from flooded Pongkor gold mine (Wed 25 Nov); 23 still trapped.",
     "India Supreme Court notice on Khalid / Imam bail pleas (Wed 25 Nov).",
     "Israel: Eisenkot secures first coalition partner, 28 of 61 needed (Wed 25 Nov).",
     "Australia passes Digital Duty of Care Act (24 Nov).",
