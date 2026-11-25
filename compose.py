@@ -134,9 +134,9 @@ def art(d, box, kind):
         d.ellipse([x1 - 40, y0 + 8, x1 - 16, y0 + 32], fill=(255, 190, 80))
     elif kind == "tariff":
         d.rectangle([cx - 26, y0 + 8, cx + 26, y1 - 8], fill=(255, 255, 255), outline=INK)
-        d.text((cx - 16, y0 + 12), "%", font=fnt(SANS_B, 26), fill=RED)
-        d.line([cx - 20, y1 - 18, cx + 20, y1 - 18], fill=INK, width=1)
-        d.line([cx - 20, y1 - 13, cx + 2, y1 - 13], fill=INK, width=1)
+        d.text((cx - 6, y0 + 8), "%", font=fnt(SANS_B, 12), fill=RED)
+        d.line([cx - 20, y1 - 15, cx + 20, y1 - 15], fill=INK, width=1)
+        d.line([cx - 20, y1 - 10, cx + 2, y1 - 10], fill=INK, width=1)
     elif kind == "turkey":
         for a in range(-50, 51, 25):
             d.arc([cx - 34, y0 + 2, cx + 34, y0 + 52], a - 160, a - 110, fill=(200, 120, 40), width=5)

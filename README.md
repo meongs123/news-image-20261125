@@ -6,7 +6,7 @@
 
 A make.fun bounty entry: a newspaper front page summing up the world's news
 of **Wednesday 25 November 2026** — 44 stories, 7 regions, 13 drawn
-illustrations, a dotted world map with numbered pins, one-line briefs, and a
+illustrations, one-line briefs, and a
 DATE CHECK box naming the stories that are *not* 25 November news.
 
 ## The image
@@ -15,16 +15,12 @@ DATE CHECK box naming the stories that are *not* 25 November news.
   (44 stories · 7 regions · 13 illustrated), a numbers strip
   (Dow 50,018.70, Nasdaq −1.48%, KOSPI −6.16%, Bangladesh Tk 17,000 +36%,
   Real Madrid 5–1 PSV, Iowa 9,500 lb) and a proportional region bar
-  (Americas 8 · Asia 13 · Europe 7 · Africa 2 · Middle East 8 · World 2 ·
+  (Americas 9 · Asia 13 · Europe 6 · Africa 2 · Middle East 8 · World 2 ·
   Oceania 4).
-- **WEDNESDAY WIRE** timeline strip: 08:18 Shenzhou-24 launches → 09:00 Iowa
-  blast set → 11:56 docking at Tiangong → Canberra treaty signed →
-  Cartagena hostages freed.
 - Lead stories: a full-width splash — **Shenzhou-24 docks at Tiangong with the
   first Pakistani in orbit** — over two half-width leads, the
   **Australia–Solomon Islands Treaty** and the **Iowa lead-azide blast**.
-- 3 big + 10 small illustrated lead cards, a dotted world map with 13
-  numbered pins, 31 numbered one-line briefs, and a red-bordered DATE CHECK
+- 3 big + 10 small illustrated lead cards, 31 numbered one-line briefs, and a
   box (ICJ Rohingya verdict — 19 Nov; COP31 collapse and Merkury sinking —
   Sun 22 Nov; Huang reinstated — Mon 23 Nov; Gibran resigns — 12 Nov;
   Dow above 50,000 — Tue 24 Nov close; Hanoi blast — Tue 24 Nov).
@@ -77,4 +73,4 @@ mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
 
 ## License
 
-MIT — see `LICENSE` (SPDX: MIT).
+MIT — see `LICENSE`.
